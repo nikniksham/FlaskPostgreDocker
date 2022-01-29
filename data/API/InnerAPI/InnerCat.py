@@ -25,12 +25,12 @@ def get_list_cat():
     return data
 
 
-def put_car(cat_id, args):
+def put_cat(cat_id, args):
     session = Session()
     cat, session = find_by_id(cat_id, session)
     if type(cat) is dict:
         return cat
-    count = 0
+    count = 1 if args["chomg"] else 0
     seo_dict = cat.to_dict(only=('name', 'gender', 'age', 'description', 'price', 'images'))
     keys = list(filter(lambda key: args[key] is not None and key in seo_dict and args[key] != seo_dict[key], list(args.keys())))
     for key in keys:
@@ -50,6 +50,17 @@ def put_car(cat_id, args):
     session.commit()
     session.close()
     return {"success": f"Информация о кошке успешно изменена"}
+
+
+def delete_cat(cat_id):
+    session = Session()
+    cat, session = find_by_id(cat_id, session)
+    if type(cat) is dict:
+        return cat
+    session.delete(cat)
+    session.commit()
+    session.close()
+    return {"success": f"Кошка успешно удалена"}
 
 
 def create_cat(args):

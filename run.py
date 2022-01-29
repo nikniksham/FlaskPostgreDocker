@@ -9,10 +9,11 @@ from flask_login import LoginManager, login_required, logout_user, current_user,
 from werkzeug.utils import redirect, secure_filename
 import FlaskConfig
 from SessionManager import Session
-from data.forms import LoginForm
+from data.forms import LoginForm, CatForm, CatEditForm, DeleteForm, LogoutForm
 from data.models.user import User
 from flask_sqlalchemy import SQLAlchemy
 from data.API.ExternalAPI.ExternalCat.CatResource import CatResourceUsual, CatListResource, CatRelevantListRecourse
+from data.API.InnerAPI.InnerCat import create_cat, get_cat_by_id, get_list_cat, put_cat, delete_cat
 
 db = SQLAlchemy()
 
@@ -245,6 +246,74 @@ def login():
 def logout():
     logout_user()
     return redirect("/admin/login")
+
+
+@application.route("/admin/admin-create-cat", methods=['GET', 'POST'])
+@login_required
+def admin_create_cat():
+    form, path = CatForm(), get_path()
+    message, result, filenames = None, False, []
+    if request.method == 'POST':
+        filenames = save_images(request.files, path, current_user.email, max_image=15)
+        message = create_cat({"name": form.name.data, "gender": form.gender.data, "images": "//".join(filenames),
+                              "age": form.age.data, "description": form.description.data, "price": form.price.data})
+        if "success" in message:
+            filenames = transport_images(filenames, f"cat/cat_{message['id']}")
+            m = put_cat(message['id'], {"images": "//".join(filenames)})
+            result = True
+            clear_old_files(current_user.email, path)
+        message = list(message.values())[-1]
+    return get_render_template('forms/form-cat.html', title='Создание кота', message=message, form=form, result=result,
+                               filenames=filenames, image_len=len(filenames) + 1)
+
+
+@application.route("/admin/admin-edit-cat/<int:cat_id>", methods=['GET', 'POST'])
+@login_required
+def admin_edit_cat(cat_id):
+    form, path = CatForm(), get_path()
+    cat = get_cat_by_id(cat_id)
+    message, result, filenames = None, False, []
+    if "message" not in cat:
+        if request.method == 'POST':
+            filenames = save_images(request.files, path, current_user.email, max_image=15)
+            chimg = list(map(lambda x: x.split("/")[-1], filenames)) != list(map(lambda x: x.split("/")[-1], cat["images"].split("//")))
+            message = put_cat(cat_id, {"name": form.name.data, "gender": form.gender.data, "chimg": chimg, "age": form.age.data,
+                                           "description": form.description.data, "price": form.price.data})
+            if "success" in message:
+                filenames = copy_files(path, f"cat/cat_{cat_id}", filenames)
+                m = put_cat(cat_id, {"images": "//".join(filenames)})
+                result = True
+            message = list(message.values())[-1]
+        else:
+            form.name.data = cat["name"]
+            form.description.data = cat["description"]
+            form.gender.data = cat["gender"]
+            form.price.data = cat["price"]
+            form.age.data = cat["age"]
+            filenames = copy_files(f"cat/cat_{cat_id}", path, cat["images"].split("//"))
+            admin_images[current_user.email] = [_.split("/")[-1] for _ in filenames]
+    else:
+        message = list(cat.values())[-1]
+    return get_render_template('forms/form-cat.html', title='Редактирование кота', message=message, form=form,
+                               result=result, filenames=filenames, image_len=len(filenames) + 1)
+
+
+@application.route("/admin/admin-delete-cat/<int:cat_id>", methods=['GET', 'POST'])
+@login_required
+def admin_delete_cat(cat_id):
+    form = DeleteForm()
+    message, name, result, path = "", "кот не найден", False, get_path()
+    cat = get_cat_by_id(cat_id)
+    if "message" not in cat:
+        name = "Кот " + cat['name']
+        if request.method == 'POST':
+            message = delete_cat(cat_id)
+            if "success" in message:
+                result = True
+                delete_folder(f"cat/cat_{cat_id}")
+            message = list(message.values())[-1]
+    return get_render_template('forms/form-delete.html', title='Удаление кота', message=message, form=form,
+                               result=result, name=name)
 
 
 # Стартовая страница

@@ -44,9 +44,9 @@
                 </div>
                 {% endfor %}
 
-                {{ form.descriptions.label }}<br>
-                {{ form.descriptions(class="form-control") }}
-                {% for error in form.descriptions.errors %}
+                {{ form.description.label }}<br>
+                {{ form.description(class="form-control") }}
+                {% for error in form.description.errors %}
                 <div class="alert alert-danger" role="alert">
                     {{ error }}
                 </div>
