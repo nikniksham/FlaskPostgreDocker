@@ -12,8 +12,8 @@ application = Flask(__name__)
 application.config.from_object(config)
 
 # db_session.global_init("db/.sqlite")
-login_manager = LoginManager()
-login_manager.init_app(application)
+# login_manager = LoginManager()
+# login_manager.init_app(application)
 
 
 def get_render_template(template_name, title, **kwargs):
