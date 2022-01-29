@@ -331,3 +331,23 @@ header {
     align-items: center;
     justify-content: center;
 }
+
+.login__block {
+    background: #fed7c8;
+    padding: 20px;
+    border-radius: 20px;
+}
+
+.settings-title {
+    font-size: 1.2rem;
+    width: 100%;
+    text-align: center;
+}
+
+.form-control {
+    margin-bottom: 10px;
+}
+
+.btn-success {
+    border-radius: 5px;
+}
