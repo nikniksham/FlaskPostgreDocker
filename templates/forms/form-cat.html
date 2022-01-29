@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block head %}
+<link rel="stylesheet" href="/static/css/admin.css">
+{% endblock %}
+
+{% block pageblock %}
+<div class="container">
+    <div class="login_container">
+        <div class="login__block">
+            <p class="settings-title">{{title}}</p>
+            <form action="" method="post" enctype=multipart/form-data>
+                {% if message %}
+                {% if result %}
+                <p class="message-success">{{message}}</p>
+                {% else %}
+                <p class="message-error">{{message}}</p>
+                {% endif %}
+                {% endif %}
+
+                {{ form.hidden_tag() }}
+
+                {{ form.name.label }}<br>
+                {{ form.name(class="form-control") }}
+                {% for error in form.name.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+                {% endfor %}
+
+                {{ form.gender.label }}<br>
+                {{ form.gender(class="form-control") }}
+                {% for error in form.gender.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+                {% endfor %}
+
+                {{ form.age.label }}<br>
+                {{ form.age(class="form-control") }}
+                {% for error in form.age.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+                {% endfor %}
+
+                {{ form.descriptions.label }}<br>
+                {{ form.descriptions(class="form-control") }}
+                {% for error in form.descriptions.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+                {% endfor %}
+
+                {{ form.price.label }}<br>
+                {{ form.price(class="form-control") }}
+                {% for error in form.price.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+                {% endfor %}
+
+                <label>Изображения</label>
+                <div class="settings-images">
+                    <div id="images1">
+                        {% if filenames %}
+                        {% for filename in filenames %}
+                        <div class="input-file-row-1">
+                            <div class="upload-file-container">
+                                <div class="delete-image"></div>
+                                <img id="image{{loop.index}}" class="visible" src="/static/img/{{filename}}"
+                                     alt="">
+                                <input type=file name=image{{loop.index}} class="photo"
+                                       id="imgInput{{loop.index}}">
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                        {% if image_len < 16 %}
+                        <div class="input-file-row-1">
+                            <div class="upload-file-container">
+                                <div class="delete-image hidden"></div>
+                                <img id="image{{image_len}}" class="this-is-image" src="#" alt="">
+                                <input type=file name=imgInput{{image_len}} class="photo"
+                                       id="imgInput{{image_len}}">
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="submit-block">
+                    {{ form.submit(type="submit", class="btn btn-success submit") }}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block end %}
+<script src="/static/js/set-images.js"></script>
+<script>
+    max_count = 15
+</script>
+{% endblock %}
