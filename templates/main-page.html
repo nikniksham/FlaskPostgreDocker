@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block pageblock %}
-<img src="/static/img/cat_main.jpg" alt="Кот лежит" style="width: 100%; filter: blur(1px);">
+<img src="/static/img/cat_main.jpg" alt="Кот лежит" class="main-page__image">
 <div class="container">
     <div class="settings__wrapper">
         <form action="GET">
@@ -40,6 +40,11 @@
         <div class="cat__container">
             <div class="cat__wrapper">
                 <img src="/static/img/cats/cat1.jpeg" alt="Самый классный кот" class="cat__img">
+                {% if is_admin %}
+                    <div class="admin__back"></div>
+                    <a href="#" class="admin__edit"></a>
+                    <a href="#" class="admin__delete"></a>
+                {% endif %}
                 <div class="cat__info">
                     <div>
                         <p class="cat__name">Маруся</p>
@@ -53,20 +58,22 @@
         </div>
         {% endfor %}
     </div>
-    <div class="pagination">
-        {% if True %}
-            <a href="#">&laquo;</a>
-        {% endif %}
-        {% for i in range(4) %}
-            {% if i == 1 %}
-                <a class="active" href="#">{{i+1}}</a>
-            {% else %}
-                <a href="#">{{i + 1}}</a>
+    <div class="pagination__aligner">
+        <div class="pagination">
+            {% if True %}
+                <a href="#">&laquo;</a>
             {% endif %}
-        {% endfor %}
-        {% if True %}
-            <a href="#">&raquo;</a>
-        {% endif %}
+            {% for i in range(4) %}
+                {% if i == 1 %}
+                    <a class="active" href="#">{{i+1}}</a>
+                {% else %}
+                    <a href="#">{{i + 1}}</a>
+                {% endif %}
+            {% endfor %}
+            {% if True %}
+                <a href="#">&raquo;</a>
+            {% endif %}
+        </div>
     </div>
 </div>
 <script src="/static/js/select.js"></script>
