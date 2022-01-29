@@ -40,6 +40,11 @@
         <div class="cat__container">
             <div class="cat__wrapper">
                 <img src="/static/img/cats/cat1.jpeg" alt="Самый классный кот" class="cat__img">
+                {% if is_admin %}
+                    <div class="admin__back"></div>
+                    <a href="#" class="admin__edit"></a>
+                    <a href="#" class="admin__delete"></a>
+                {% endif %}
                 <div class="cat__info">
                     <div>
                         <p class="cat__name">Маруся</p>
