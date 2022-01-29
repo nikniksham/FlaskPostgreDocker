@@ -1,5 +1,73 @@
-{% extends "main.html" %}
+{% extends "base.html" %}
 
 {% block pageblock %}
-<a href="/admin/logout"><h1>Гыыыы</h1></a>
+<img src="/static/img/cat_main.jpg" alt="Кот лежит" style="width: 100%; filter: blur(1px);">
+<div class="container">
+    <div class="settings__wrapper">
+        <form action="GET">
+            <div class="settings__container">
+                <div class="custom-select" style="width:200px;">
+                    <select>
+                        <option value="Type 1">Порода</option>
+                        <option value="Type 2">Будет</option>
+                        <option value="Type 3">Из</option>
+                        <option value="Type 4">Базы Данных</option>
+                    </select>
+                </div>
+                <div class="custom-select" style="width:175px;">
+                    <select>
+                        <option value="Type 1">Возраст</option>
+                        <option value="Type 2">Будет</option>
+                        <option value="Type 3">Из</option>
+                        <option value="Type 4">Базы Данных</option>
+                    </select>
+                </div>
+                <div class="custom-select" style="width:150px;">
+                    <select>
+                        <option value="Type 1">Пол</option>
+                        <option value="Type 1">Будет</option>
+                        <option value="Type 1">Из</option>
+                        <option value="Type 1">Базы Данных</option>
+                    </select>
+                </div>
+
+                <input type="text" class="settings__input" placeholder="Введите свой запрос сюда">
+            </div>
+        </form>
+    </div>
+    <div class="cat__list">
+        {% for i in range(6) %}
+        <div class="cat__container">
+            <div class="cat__wrapper">
+                <img src="/static/img/cats/cat1.jpeg" alt="Самый классный кот" class="cat__img">
+                <div class="cat__info">
+                    <div>
+                        <p class="cat__name">Маруся</p>
+                        <p class="cat__age"><span>Возраст: </span> 64 месяца</p>
+                        <p class="cat__gender"><span>Пол: </span> Женский</p>
+                        <p class="cat__cost"><span>Цена: </span> 100 ₽</p>
+                    </div>
+                    <a href="#" class="cat__link">Больше</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="pagination">
+        {% if True %}
+            <a href="#">&laquo;</a>
+        {% endif %}
+        {% for i in range(4) %}
+            {% if i == 1 %}
+                <a class="active" href="#">{{i+1}}</a>
+            {% else %}
+                <a href="#">{{i + 1}}</a>
+            {% endif %}
+        {% endfor %}
+        {% if True %}
+            <a href="#">&raquo;</a>
+        {% endif %}
+    </div>
+</div>
+<script src="/static/js/select.js"></script>
 {% endblock %}

@@ -1,0 +1,236 @@
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 100vh;
+    background: #fcefdc;
+    padding-top: 60px;
+}
+
+p {
+    padding: 0;
+    margin: 0;
+}
+
+header {
+    z-index: 1;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 60px;
+    padding: 5px;
+    background: #c9e9da;
+    box-shadow: 0 2px 4px #c9e9da;
+}
+
+.header__wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.header__logo {
+    color: black !important;
+    font-family: 'Pacifico', cursive;
+    font-size: 24px;
+    text-decoration: none;
+}
+
+.header__nav a {
+    color: black !important;
+    font-weight: 500;
+    font-size: 1.2rem;
+}
+
+.header__nav a + a {
+    margin-left: 20px;
+}
+
+.header__call img {
+    width: 60px;
+    height: 60px;
+}
+
+.settings__wrapper {
+    position: relative;
+}
+
+.settings__container {
+    display: flex;
+    justify-content: space-between;
+    background: #fc95b3;
+    position: absolute;
+    top: -50px;
+    border-radius: 20px;
+    padding: 25px;
+    width: 100%;
+    box-shadow: 2px 2px 3px #fc95b3, -2px 2px 3px #fc95b3;
+}
+
+.settings__input {
+    max-width: calc(100% - 600px);
+    width: 50%;
+    background: transparent;
+    border: 2px solid #f0ede5;
+    color: #f0ede5;
+    font-size: 1.2rem;
+    font-weight: 500;
+    border-radius: 10px;
+    padding: 7px 50px 10px 20px;
+    background-image: url('/static/img/search.svg');
+    background-repeat: no-repeat;
+    background-position: calc(100% - 10px) 51%;
+    background-size: 25px;
+}
+
+.settings__input::placeholder {
+  color: #f0ede5;
+  opacity: 0.5;
+}
+
+.cat__list {
+    padding-top: 100px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.cat__container {
+    width: calc(33% - 15px);
+    border-radius: 20px;
+    background: #fed7c8;
+    margin-bottom: 30px;
+    box-shadow: 0 3px 3px #fed7c8;
+}
+
+.cat__container span {
+    font-weight: 500;
+}
+
+.cat__img {
+    width: 100%;
+    border-radius: 20px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.cat__info {
+    padding: 20px 30px;
+    font-size: 1.4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.cat__name {
+    font-family: 'Pacifico', cursive;
+    font-size: 1.5rem;
+}
+
+.cat__link {
+    color: black !important;
+}
+
+.pagination {
+    margin-top: 30px;
+    display: inline-block;
+}
+
+.pagination a {
+  color: black;
+  float: left;
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 5px;
+}
+
+.pagination a.active {
+  background-color: #fc95b3;
+  color: white;
+  border: 1px solid #fc95b3;
+}
+
+.pagination a:hover:not(.active) {background-color: #fed7c8;}
+
+.pagination a:first-child {
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+.pagination a:last-child {
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+/* контейнер должен быть расположен относительно: */
+.custom-select {
+  position: relative;
+  border: 2px solid #f0ede5;
+  color: #f0ede5;
+  background-color: #fc95b3;
+  font-size: 1.2rem;
+  font-weight: 500;
+  border-radius: 10px;
+  padding: 7px 35px 10px 20px;
+}
+
+.custom-select:focus-visible, .settings__input:focus-visible {
+    outline: none;
+}
+
+.custom-select select {
+  display: none; /* hide original SELECT element: */
+}
+
+.select-selected {
+  background-color: transparent;
+}
+
+/* стиль стрелки внутри элемента select: */
+.select-selected:after {
+      position: absolute;
+      content: "";
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('/static/img/arrow.svg');
+      background-repeat: no-repeat;
+      background-position: calc(100% - 10px) 51%;
+      background-size: 16px;
+}
+
+/* стиль элементов (опций), включая выбранный элемент: */
+.select-items div,.select-selected {
+    padding: 0 5px;
+  color: #f0ede5;
+  padding: 8px 16px;
+  border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* стиль элементов (опции): */
+.select-items {
+      border: 2px solid;
+      position: absolute;
+      background-color: #fc95b3;
+      top: calc(100% + 0px);
+      left: 5px;
+      right: 5px;
+      z-index: 99;
+      border-bottom-left-radius: 5px;
+      border-bottom-right-radius: 5px;
+}
+
+/* скрыть элементы при закрытии окна выбора: */
+.select-hide {
+  display: none;
+}
+
+.select-items div:hover, .same-as-selected {
+  background-color: rgba(0, 0, 0, 0.1);
+}
