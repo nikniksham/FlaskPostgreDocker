@@ -36,6 +36,14 @@
                 </div>
                 {% endfor %}
 
+                {{ form.species.label }}<br>
+                {{ form.species(class="form-control") }}
+                {% for error in form.species.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+                {% endfor %}
+
                 {{ form.age.label }}<br>
                 {{ form.age(class="form-control") }}
                 {% for error in form.age.errors %}
@@ -90,17 +98,18 @@
                 </div>
 
                 <div class="submit-block">
+                    <a class="link-exit btn btn-primary button-exit" href='/'>На главную</a>
                     {{ form.submit(type="submit", class="btn btn-success submit") }}
                 </div>
             </form>
         </div>
     </div>
 </div>
-{% endblock %}
 
-{% block end %}
+<script src="/static/js/JQuery.min.js"></script>
 <script src="/static/js/set-images.js"></script>
 <script>
     max_count = 15
+
 </script>
 {% endblock %}

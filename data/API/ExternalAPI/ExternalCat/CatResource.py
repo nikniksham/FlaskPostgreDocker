@@ -6,6 +6,20 @@ from data.models.cat import Cat
 from data.API.ExternalAPI.main_file import raise_error
 
 
+def to_dict(cat):
+    cat_dict = {}
+    if cat:
+        cat_dict["catId"] = cat.catId
+        cat_dict["name"] = cat.name
+        cat_dict["gender"] = cat.gender
+        cat_dict["age"] = cat.age
+        cat_dict["description"] = cat.description
+        cat_dict["price"] = cat.price
+        cat_dict["images"] = cat.images
+        cat_dict["species"] = cat.species
+    return cat_dict
+
+
 def find_by_id(id, session):
     cat = session.query(Cat).get(id)
     if not cat:
@@ -17,7 +31,7 @@ class CatResourceUsual(Resource):
     def get(self, cat_id):
         session = Session()
         cat, session = find_by_id(cat_id, session)
-        cat_dict = cat.to_dict()
+        cat_dict = to_dict(cat)
         session.close()
         return jsonify(cat_dict)
 
@@ -30,7 +44,7 @@ class CatListResource(Resource):
         if cats:
             for cat_id, cat in enumerate(cats):
                 if need[0] <= cat_id <= need[1]:
-                    cats_list.append(cat.to_dict())
+                    cats_list.append(to_dict(cat))
                 elif cat_id > need[1]:
                     break
             session.close()
@@ -67,7 +81,7 @@ class CatRelevantListRecourse(Resource):
                 arr_with_mass.append([cat, mass])
             arr_with_mass.sort(key=lambda x: -x[1])
             for cat in arr_with_mass[:min(count, len(arr_with_mass))]:
-                cat_list.append(cat[0].to_dict())
+                cat_list.append(to_dict(cat[0]))
             session.close()
             return cat_list
         raise_error("А всё, коты то кончились", session)

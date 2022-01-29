@@ -1,5 +1,5 @@
 import os
-from PostgreConfig import DB_USER, DB_PASS, DB_NAME, DB_HOST, DB_PORT
+from config.PostgreConfig import DB_USER, DB_PASS, DB_NAME, DB_HOST, DB_PORT
 
 SECRET_KEY = "Super_secret_code"  # os.urandom(30)
 DEBUG = False

@@ -7,13 +7,13 @@ from flask_restful import Api
 from flask import Flask, render_template, request
 from flask_login import LoginManager, login_required, logout_user, current_user, login_user
 from werkzeug.utils import redirect, secure_filename
-import FlaskConfig
+from config import FlaskConfig
 from SessionManager import Session
-from data.forms import LoginForm, CatForm, CatEditForm, DeleteForm, LogoutForm
+from data.forms import LoginForm, CatForm, DeleteForm
 from data.models.user import User
 from flask_sqlalchemy import SQLAlchemy
 from data.API.ExternalAPI.ExternalCat.CatResource import CatResourceUsual, CatListResource, CatRelevantListRecourse
-from data.API.InnerAPI.InnerCat import create_cat, get_cat_by_id, get_list_cat, put_cat, delete_cat
+from data.API.InnerAPI.InnerCat import create_cat, get_cat, put_cat, delete_cat
 
 db = SQLAlchemy()
 
@@ -256,10 +256,12 @@ def admin_create_cat():
     if request.method == 'POST':
         filenames = save_images(request.files, path, current_user.email, max_image=15)
         message = create_cat({"name": form.name.data, "gender": form.gender.data, "images": "//".join(filenames),
-                              "age": form.age.data, "description": form.description.data, "price": form.price.data})
+                              "age": form.age.data, "description": form.description.data, "price": form.price.data,
+                              "species": form.species.data})
         if "success" in message:
             filenames = transport_images(filenames, f"cat/cat_{message['id']}")
             m = put_cat(message['id'], {"images": "//".join(filenames)})
+            print(m)
             result = True
             clear_old_files(current_user.email, path)
         message = list(message.values())[-1]
@@ -271,14 +273,14 @@ def admin_create_cat():
 @login_required
 def admin_edit_cat(cat_id):
     form, path = CatForm(), get_path()
-    cat = get_cat_by_id(cat_id)
+    cat = get_cat(cat_id)
     message, result, filenames = None, False, []
     if "message" not in cat:
         if request.method == 'POST':
             filenames = save_images(request.files, path, current_user.email, max_image=15)
             chimg = list(map(lambda x: x.split("/")[-1], filenames)) != list(map(lambda x: x.split("/")[-1], cat["images"].split("//")))
             message = put_cat(cat_id, {"name": form.name.data, "gender": form.gender.data, "chimg": chimg, "age": form.age.data,
-                                           "description": form.description.data, "price": form.price.data})
+                                       "description": form.description.data, "price": form.price.data, "species": form.species.data})
             if "success" in message:
                 filenames = copy_files(path, f"cat/cat_{cat_id}", filenames)
                 m = put_cat(cat_id, {"images": "//".join(filenames)})
@@ -286,6 +288,7 @@ def admin_edit_cat(cat_id):
             message = list(message.values())[-1]
         else:
             form.name.data = cat["name"]
+            form.species.data = cat["species"]
             form.description.data = cat["description"]
             form.gender.data = cat["gender"]
             form.price.data = cat["price"]
@@ -303,7 +306,7 @@ def admin_edit_cat(cat_id):
 def admin_delete_cat(cat_id):
     form = DeleteForm()
     message, name, result, path = "", "кот не найден", False, get_path()
-    cat = get_cat_by_id(cat_id)
+    cat = get_cat(cat_id)
     if "message" not in cat:
         name = "Кот " + cat['name']
         if request.method == 'POST':

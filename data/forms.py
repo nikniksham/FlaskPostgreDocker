@@ -5,8 +5,10 @@ from wtforms.validators import DataRequired, Email, EqualTo, Length
 
 class CatForm(FlaskForm):
     name = StringField('Кличка питомца', validators=[DataRequired()])
-    gender = SelectField("Пол питомца", choices=[(0, 'Не указано'), (1, "Мужской"), (2, "Женский")])
-    age = SelectField('Возраст', choices=[(0, 'Не указано'), (1, '1 месяц'), (2, "2 месяца"), (3, "3 месяца"), (4, "6 месяцев"), (5, "1 год"), (6, "2 года"), (7, "3 года и старше")])
+    species = StringField('Порода', validators=[DataRequired()])
+    gender = SelectField("Пол питомца", choices=[("0", 'Не указано'), ("1", "Мужской"), ("2", "Женский")])
+    age = SelectField('Возраст', choices=[("0", 'Не указано'), ("1", '1 месяц'), ("2", "2 месяца"), ("3", "3 месяца"),
+                                          ("4", "6 месяцев"), ("5", "1 год"), ("6", "2 года"), ("7", "3 года и старше")])
     description = TextAreaField('Описание', validators=[DataRequired()])
     price = StringField('Цена', validators=[DataRequired(), EqualTo('password', message='Пароли не совпадают')])
     submit = SubmitField('Создать')
