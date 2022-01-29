@@ -1,20 +1,13 @@
 import datetime
+from flask_restful import Api
 from flask import Flask, render_template, url_for, request, send_from_directory, flash
 from flask_login import LoginManager, login_required, logout_user, current_user, login_user
-from sqlalchemy import create_engine
 from werkzeug.utils import redirect
-from werkzeug.utils import secure_filename
-import os
-import psycopg2
 import FlaskConfig
-from PostgreConfig import DB_HOST, DB_USER, DB_NAME, DB_PASS, DB_PORT
-# from data import db_session
+from SessionManager import Session
 from data.forms import LoginForm
 from data.models.user import User
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.pool import NullPool
-from sqlalchemy.orm import sessionmaker
-# db = create_engine('mysql://root@localhost/test_database', poolclass=NullPool)
 
 db = SQLAlchemy()
 
@@ -26,11 +19,9 @@ application.config.from_object(FlaskConfig)
 login_manager = LoginManager()
 login_manager.init_app(application)
 
-eng = create_engine(f'postgresql://{DB_USER}:{DB_PASS}@{DB_HOST}/{DB_NAME}')
-Session = sessionmaker(bind=eng)
-
-# AdminConn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST)
-# UserConn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST)
+api = Api()
+api.add_resource(application)
+# api.add_resource()
 
 
 @login_manager.user_loader
@@ -49,10 +40,6 @@ def get_render_template(template_name, title, **kwargs):
 
 def main(port=5000):
     db.init_app(application)
-    import data.models.user
-
-    # Create Database Models
-
     application.run(port=port)
 
 
