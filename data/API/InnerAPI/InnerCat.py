@@ -20,7 +20,7 @@ def to_dict(cat):
 def find_by_id(id, session):
     cat = session.query(Cat).get(id)
     if not cat:
-        return raise_error(f"Кошка не найдена", session)
+        return raise_error(f"Питомец не найден", session)
     return cat, session
 
 
@@ -66,7 +66,7 @@ def put_cat(cat_id, args):
         return raise_error("Пустой запрос", session)[0]
     session.commit()
     session.close()
-    return {"success": f"Информация о кошке успешно изменена"}
+    return {"success": f"Информация о питомце успешно изменена"}
 
 
 def delete_cat(cat_id):
@@ -77,7 +77,7 @@ def delete_cat(cat_id):
     session.delete(cat)
     session.commit()
     session.close()
-    return {"success": f"Кошка успешно удалена"}
+    return {"success": f"Питомец успешно удален"}
 
 
 def create_cat(args):
@@ -97,4 +97,4 @@ def create_cat(args):
     new_id, name = new_cat.catId, new_cat.name
     session.close()
 
-    return {'id': new_id, 'success': f'Seo настройка {name} создана'}
+    return {'id': new_id, 'success': f'Новый питомец {name} создан'}

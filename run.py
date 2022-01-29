@@ -14,6 +14,7 @@ from data.models.user import User
 from flask_sqlalchemy import SQLAlchemy
 from data.API.ExternalAPI.ExternalCat.CatResource import CatResourceUsual, CatListResource, CatRelevantListRecourse
 from data.API.InnerAPI.InnerCat import create_cat, get_cat, put_cat, delete_cat
+from settings import config
 
 db = SQLAlchemy()
 
@@ -216,6 +217,10 @@ def get_render_template(template_name, title, **kwargs):
     return render_template(template_name, title=title, **kwargs)
 
 
+def setup_config(application):
+    application["config"] = config
+
+
 def main(port=5000):
     db.init_app(application)
     application.run(port=port)
@@ -326,4 +331,4 @@ def website_main_page():
 
 
 if __name__ == '__main__':
-    main(port=8000)
+    main()

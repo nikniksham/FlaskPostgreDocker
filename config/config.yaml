@@ -1,0 +1,5 @@
+common:
+  port: 5432
+postgres:
+  database_url: postgres://postgres:password@localhost/db_for_proj
+  require_ssl: false
