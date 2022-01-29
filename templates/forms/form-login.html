@@ -1,0 +1,50 @@
+{% extends "main.html" %}
+
+{% block head %}
+<link rel="stylesheet" href="/static/css/admin.css">
+{% endblock %}
+
+{% block pageblock %}
+<div class="container">
+    <div class="fh">
+        <div class="admin-container">
+            <p class="settings-title">{{title}}</p>
+            <div class="settings">
+                <form action="" method="post" enctype=multipart/form-data>
+                    <div class="admin-main">
+                        {% if message %}
+                        {% if result %}
+                        <p class="message-success">{{message}}</p>
+                        {% else %}
+                        <p class="message-error">{{message}}</p>
+                        {% endif %}
+                        {% endif %}
+
+                        {{ form.hidden_tag() }}
+
+                        {{ form.email.label }}<br>
+                        {{ form.email(class="form-control") }}<br>
+                        {% for error in form.email.errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </div>
+                        {% endfor %}
+
+                        {{ form.password.label }}<br>
+                        {{ form.password(class="form-control", type="password") }}<br>
+                        {% for error in form.password.errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </div>
+                        {% endfor %}
+
+                        <div class="submit-block">
+                            {{ form.submit(type="submit", class="btn btn-success submit") }}
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
