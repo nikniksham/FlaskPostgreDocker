@@ -14,7 +14,6 @@ from data.models.user import User
 from flask_sqlalchemy import SQLAlchemy
 from data.API.ExternalAPI.ExternalCat.CatResource import CatResourceUsual, CatListResource, CatRelevantListRecourse
 from data.API.InnerAPI.InnerCat import create_cat, get_cat, put_cat, delete_cat
-from settings import config
 
 db = SQLAlchemy()
 
@@ -221,9 +220,9 @@ def setup_config(application):
     application["config"] = config
 
 
-def main(port=5000):
+def main():
     db.init_app(application)
-    application.run(port=port)
+    application.run(host='0.0.0.0')
 
 
 @application.route("/admin/login", methods=['GET', 'POST'])
@@ -328,6 +327,7 @@ def admin_delete_cat(cat_id):
 @application.route("/")
 def website_main_page():
     return get_render_template("main-page.html", title="главная страница")
+    # return "Some data"
 
 
 if __name__ == '__main__':

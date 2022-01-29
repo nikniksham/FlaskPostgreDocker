@@ -1,0 +1,32 @@
+version: '3.9'
+services:
+  flask:
+    build: ./
+    container_name: backend-flask
+    environment:
+      - FLASK_ENV=development
+      - PYTHONUNBUFFERED=True
+      - DATABASE_URL=postgresql://postgre:password@localhost/db_for_proj
+      #- DATABASE_URL=postgresql://postgre:password@host.docker.internal/db_for_proj
+    volumes:
+      - ./:/app
+    ports:
+      - "5000:5000"
+    expose:
+      - 5000
+    depends_on:
+      - db
+    restart: on-failure
+    command: run.py
+
+  db:
+    image: postgres:14
+    command: postgres -p 5432
+    environment:
+      POSTGRES_DB: "db_for_proj"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "password"
+    volumes:
+      - .C:\Users\Niki\PycharmProjects\FlaskPostgreDocker\db
+    ports:
+      - "5432:5432"
