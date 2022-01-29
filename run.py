@@ -9,7 +9,7 @@ from flask_login import LoginManager, login_required, logout_user, current_user,
 from werkzeug.utils import redirect, secure_filename
 from config import FlaskConfig
 from SessionManager import Session
-from data.forms import LoginForm, CatForm, DeleteForm
+from data.forms import LoginForm, CatForm, DeleteForm, CatEditForm
 from data.models.user import User
 from flask_sqlalchemy import SQLAlchemy
 from data.API.ExternalAPI.ExternalCat.CatResource import CatResourceUsual, CatListResource, CatRelevantListRecourse
@@ -216,10 +216,6 @@ def get_render_template(template_name, title, **kwargs):
     return render_template(template_name, title=title, **kwargs)
 
 
-def setup_config(application):
-    application["config"] = config
-
-
 def main():
     db.init_app(application)
     application.run(host='0.0.0.0')
@@ -276,7 +272,7 @@ def admin_create_cat():
 @application.route("/admin/admin-edit-cat/<int:cat_id>", methods=['GET', 'POST'])
 @login_required
 def admin_edit_cat(cat_id):
-    form, path = CatForm(), get_path()
+    form, path = CatEditForm(), get_path()
     cat = get_cat(cat_id)
     message, result, filenames = None, False, []
     if "message" not in cat:
@@ -288,6 +284,7 @@ def admin_edit_cat(cat_id):
             if "success" in message:
                 filenames = copy_files(path, f"cat/cat_{cat_id}", filenames)
                 m = put_cat(cat_id, {"images": "//".join(filenames)})
+                print(m)
                 result = True
             message = list(message.values())[-1]
         else:
