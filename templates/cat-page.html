@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block pageblock %}
+<div class="container">
+    <a href="/" class="go-to-main">Вернуться в каталог</a>
+    <div class="personal__block">
+        <p class="personal__name">{{name}}</p>
+        <div class="personal__wrapper">
+            <img src="/static/img/cats/cat1.jpeg" alt="" class="personal__img">
+        </div>
+        <div class="personal__info">
+            {% if gender == 0 %}
+            <p class="personal__gender"><span>Пол:</span><br>Не указан</p>
+            {% elif gender == 1 %}
+            <p class="personal__gender"><span>Пол:</span><br>Мальчик</p>
+            {% elif gender == 2 %}
+            <p class="personal__gender"><span>Пол:</span><br>Девочка</p>
+            {% endif %}
+            {% if species != "" %}
+            <p class="personal__species"><span>Порода:</span><br>{{species}}</p>
+            {% else %}
+            <p class="personal__species"><span>Порода:</span><br>Не указана</p>
+            {% endif %}
+            <p class="personal__age"><span>Возраст:</span><br>{{age}} мес.</p>
+            <p class="personal__price"><span>Цена:</span><br>{{price}} ₽</p>
+        </div>
+        <p class="personal__description"><span>Описание:</span><br>{{description}}</p>
+        <p class="personal__recommendation">Похожие:</p>
+        <div class="cat__list line">
+            {% for i in range(4) %}
+            <div class="cat__container-small">
+                <div class="cat__wrapper">
+                    <img src="/static/img/cats/cat1.jpeg" alt="Самый классный кот" class="cat__img">
+                    <div class="cat__info">
+                        <div>
+                            <p class="cat__name">Маруся</p>
+                            <p class="cat__age"><span>Возраст: </span> 64 месяца</p>
+                            <p class="cat__gender"><span>Пол: </span> Женский</p>
+                            <p class="cat__cost"><span>Цена: </span> 100 ₽</p>
+                        </div>
+                        <a href="#" class="cat__link">Больше</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
