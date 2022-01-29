@@ -3,7 +3,6 @@
 
 function limit(element, max_chars)
 {
-    console.log(element.id);
     if(element.value.length > max_chars) {
         element.value = element.value.substr(0, max_chars);
     }
