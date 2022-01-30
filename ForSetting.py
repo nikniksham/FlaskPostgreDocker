@@ -1,2 +1,2 @@
 import os
-print("." + "\\".join(os.path.abspath("db/db_for_proj.sql").split("\\")[:-1]))
+print("." + (os.path.abspath("db")))  # !!! FOR SETTING START WITH docker-compose up

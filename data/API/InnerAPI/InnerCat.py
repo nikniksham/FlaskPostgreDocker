@@ -24,6 +24,21 @@ def find_by_id(id, session):
     return cat, session
 
 
+def get_all_species():
+    session = Session()
+    data = list(set([to_dict(item)["species"] for item in session.query(Cat).all()]))
+    session.close()
+    return data
+
+
+def get_count_pages():
+    session = Session()
+    count = len([to_dict(item) for item in session.query(Cat).all()])
+    count = count // 6 + (1 if (count % 6 != 0 or count == 0) else 0)
+    session.close()
+    return count
+
+
 def get_cat(cat_id):
     cat, session = find_by_id(cat_id, Session())
     if type(cat) is dict:

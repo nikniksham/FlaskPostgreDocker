@@ -3,7 +3,7 @@ import random
 import shutil
 import threading
 from PIL import Image
-from flask_restful import Api
+from flask_restful import Api, abort
 from flask import Flask, render_template, request
 from flask_login import LoginManager, login_required, logout_user, current_user, login_user
 from werkzeug.utils import redirect, secure_filename
@@ -13,7 +13,7 @@ from data.forms import LoginForm, CatForm, DeleteForm, CatEditForm
 from data.models.user import User
 from flask_sqlalchemy import SQLAlchemy
 from data.API.ExternalAPI.ExternalCat.CatResource import CatResourceUsual, CatListResource, CatRelevantListRecourse
-from data.API.InnerAPI.InnerCat import create_cat, get_cat, put_cat, delete_cat
+from data.API.InnerAPI.InnerCat import create_cat, get_cat, put_cat, delete_cat, get_all_species, get_list_cat, get_count_pages
 
 db = SQLAlchemy()
 
@@ -26,11 +26,10 @@ application.config.from_object(FlaskConfig)
 login_manager = LoginManager()
 login_manager.init_app(application)
 
-api = Api()
-api.add_resource(application)
-api.add_resource(CatResourceUsual, "/api/cat/<int: cat_id>")
-api.add_resource(CatListResource, "/api/cat_list/<int: page>")
-api.add_resource(CatRelevantListRecourse, "/api/cat_relevant/<int: count>")
+api = Api(application)
+api.add_resource(CatResourceUsual, '/api/cat/<int:cat_id>')
+api.add_resource(CatListResource, '/api/cat_list/<int:page>')
+api.add_resource(CatRelevantListRecourse, '/api/cat_relevant/<int:count>')
 
 
 def get_path(end=""):
@@ -46,8 +45,6 @@ def save_image_multithreading(filename, file, feedback=False, favic=False):
     with Image.open(filename) as image:
         if image.size[0] > size[0] or image.size[1] > size[1]:
             image.thumbnail(size)
-        split_name = filename.split('.')
-        path, format = '.'.join(split_name[:-1]), split_name[-1]
         if not favic:
             image.save(filename)
         else:
@@ -213,12 +210,14 @@ def load_user(user_id):
 
 
 def get_render_template(template_name, title, **kwargs):
-    return render_template(template_name, title=title, **kwargs)
+    return render_template(template_name, title=title, is_admin=current_user.is_authenticated, species=get_all_species(),
+                           pages_count=get_count_pages(), **kwargs)
 
 
 def main():
     db.init_app(application)
-    application.run(host='0.0.0.0')
+    # application.run(host='0.0.0.0')  # !!! FOR START WITH docker-compose up
+    application.run(port='5000')  # @@@ FOR DEBUG IN PYCHARM
 
 
 @application.route("/admin/login", methods=['GET', 'POST'])
@@ -261,7 +260,6 @@ def admin_create_cat():
         if "success" in message:
             filenames = transport_images(filenames, f"cat/cat_{message['id']}")
             m = put_cat(message['id'], {"images": "//".join(filenames)})
-            print(m)
             result = True
             clear_old_files(current_user.email, path)
         message = list(message.values())[-1]
@@ -284,7 +282,6 @@ def admin_edit_cat(cat_id):
             if "success" in message:
                 filenames = copy_files(path, f"cat/cat_{cat_id}", filenames)
                 m = put_cat(cat_id, {"images": "//".join(filenames)})
-                print(m)
                 result = True
             message = list(message.values())[-1]
         else:
@@ -326,6 +323,14 @@ def website_main_page():
     return get_render_template("main-page.html", title="главная страница")
     # return "Some data"
 
+
+@application.route("/cat-page/<int:cat_id>")
+def cat_page_by_id(cat_id):
+    cat = get_cat(cat_id)
+    if cat:
+        # Из cat можешь извлекать всю необходимую информацию
+        return get_render_template("cat-page.html", "Личная страница этого котика")
+    return abort(404)
 
 if __name__ == '__main__':
     main()

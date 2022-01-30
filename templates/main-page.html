@@ -8,26 +8,29 @@
             <div class="settings__container">
                 <div class="custom-select" style="width:200px;">
                     <select>
-                        <option value="Type 1">Порода</option>
-                        <option value="Type 2">Будет</option>
-                        <option value="Type 3">Из</option>
-                        <option value="Type 4">Базы Данных</option>
+                        <option value="Type 0">Порода</option>
+                        {% for spec in species %}
+                        <option value="{{spec}}">{{spec}}</option>
+                        {% endfor %}
                     </select>
                 </div>
                 <div class="custom-select" style="width:175px;">
                     <select>
-                        <option value="Type 1">Возраст</option>
-                        <option value="Type 2">Будет</option>
-                        <option value="Type 3">Из</option>
-                        <option value="Type 4">Базы Данных</option>
+                        <option value="0">Возраст</option>
+                        <option value="1">1 месяц</option>
+                        <option value="2">2 месяца</option>
+                        <option value="3">3 месяца</option>
+                        <option value="4">6 месяцев</option>
+                        <option value="5">1 год</option>
+                        <option value="6">2 года</option>
+                        <option value="7">3 года и старше</option>
                     </select>
                 </div>
                 <div class="custom-select" style="width:150px;">
                     <select>
-                        <option value="Type 1">Пол</option>
-                        <option value="Type 1">Будет</option>
-                        <option value="Type 1">Из</option>
-                        <option value="Type 1">Базы Данных</option>
+                        <option value="0">Пол</option>
+                        <option value="1">Мужской</option>
+                        <option value="2">Женский</option>
                     </select>
                 </div>
 
@@ -42,8 +45,8 @@
                 <img src="/static/img/cats/cat1.jpeg" alt="Самый классный кот" class="cat__img">
                 {% if is_admin %}
                     <div class="admin__back"></div>
-                    <a href="#" class="admin__edit"></a>
-                    <a href="#" class="admin__delete"></a>
+                    <a href="/admin/admin-edit-cat/CATID" class="admin__edit"></a>
+                    <a href="/admin/admin-delete-cat/CATID" class="admin__delete"></a>
                 {% endif %}
                 <div class="cat__info">
                     <div>

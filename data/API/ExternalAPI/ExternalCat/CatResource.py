@@ -38,6 +38,7 @@ class CatResourceUsual(Resource):
 
 class CatListResource(Resource):
     def get(self, page):
+        page = max(0, page - 1)
         session = Session()
         cats = session.query(Cat).all()
         cats_list, need = [], [6 * page, 6 * (page + 1) - 1]
@@ -54,7 +55,7 @@ class CatListResource(Resource):
 
 
 class CatRelevantListRecourse(Resource):
-    def put(self, count):
+    def post(self, count):
         session = Session()
         cats = session.query(Cat).all()
         cat_list = []
