@@ -63,18 +63,18 @@
     </div>
     <div class="pagination__aligner">
         <div class="pagination">
-            {% if True %}
-                <a href="#">&laquo;</a>
+            {% if current_page != 1 %}
+                <a href="/page/{{current_page-1}}">&laquo;</a>
             {% endif %}
-            {% for i in range(4) %}
-                {% if i == 1 %}
+            {% for i in range(pages_count) %}
+                {% if i == current_page - 1 %}
                     <a class="active" href="#">{{i+1}}</a>
                 {% else %}
-                    <a href="#">{{i + 1}}</a>
+                    <a href="/page/{{i+1}}">{{i + 1}}</a>
                 {% endif %}
             {% endfor %}
-            {% if True %}
-                <a href="#">&raquo;</a>
+            {% if current_page != pages_count %}
+                <a href="/page/{{current_page+1}}">&raquo;</a>
             {% endif %}
         </div>
     </div>
