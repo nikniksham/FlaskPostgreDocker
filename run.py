@@ -212,7 +212,7 @@ def load_user(user_id):
 
 def get_render_template(template_name, title, **kwargs):
     return render_template(template_name, title=title, is_admin=current_user.is_authenticated, species=get_all_species(),
-                           pages_count=10, **kwargs)
+                           pages_count=get_count_pages(), **kwargs)
 
 
 def main():
@@ -323,7 +323,10 @@ def admin_delete_cat(cat_id):
 # Стартовая страница
 @application.route("/")
 def website_main_page():
-    return get_render_template("main-page.html", title="главная страница", current_page=1)
+    cats = get_cat_for_page(1)
+    for cat in cats:
+        cat["age"] = {"0": "Не указано", "1": "1 месяц", "2": "2 месяца", "3": "3 месяца", "4": "6 месяцев", "5": "1 год", "6": "2 года", "7": "3 года и более"}[cat["age"]]
+    return get_render_template("main-page.html", title="главная страница", current_page=1, cats=cats)
     # return "Some data"
 
 
@@ -331,7 +334,9 @@ def website_main_page():
 @application.route("/page/<int:page>")
 def website_main_page_by_page(page):
     cats = get_cat_for_page(page)
-    return get_render_template("main-page.html", title="главная страница", current_page=page)
+    for cat in cats:
+        cat["age"] = {"0": "Не указано", "1": "1 месяц", "2": "2 месяца", "3": "3 месяца", "4": "6 месяцев", "5": "1 год", "6": "2 года", "7": "3 года и более"}[cat["age"]]
+    return get_render_template("main-page.html", title="главная страница", current_page=page, cats=cats)
     # return "Some data"
 
 
@@ -341,6 +346,9 @@ def cat_page_by_id(cat_id):
     if cat:
         # dop_cats = post("http://localhost:5000/api/cat_relevant/4", json={"catId": cat["id"], "species": cat["species"], "gender": cat["gender"], "age": cat["age"], "text": cat["description"]}).json()
         dop_cats = [{'catId': 7, 'name': 'Какой-то кот', 'gender': '1', 'age': '7', 'description': 'Какой-то кот. Потерян, ищет новый дом. Что-то там ещё и про что-то ещё', 'price': 5000, 'images': 'cat/cat_7/tNwLvI7cvDsWU43uyfwVi6TzcLFAqhU8RktTqJVgmAoNFBJLwa.png//cat/cat_7/LHyp0mBueb8oAKBvpwsUsMdiShhlRAn0MgRiGUdS9MRRtSheiN.png//cat/cat_7/THqWs3Xu7DYu1nsMBqpXMhBT21jwfRaAa9Zn6uNKbsb3bfcJDk.png//cat/cat_7/kDg6oh7Rzqy50hGRnX5vQp7uc48Ctt9xPXcgumVqep00RlWIG4.png//cat/cat_7/zWI6X8SeSnilt28kKhWqjbnzQuz0ZRJZqqNZsBcXTnkCSxDebQ.png//cat/cat_7/wZrAuSPwadwG1ydXjywIMRN3iRR5TAbcvivhSRBvn2rjnNNvSB.png//cat/cat_7/TKg9mL3340DNZCfaAgJnXEsP5DCSvFfZkxGfJwtY9z3GLaCVaf.png', 'species': 'Программист'}, {'catId': 9, 'name': 'aesrdtfygu', 'gender': '1', 'age': '7', 'description': 'zxvvzxvxzvxv', 'price': 241142412, 'images': 'cat/cat_9/bucV0yUGwprAxfmq8913MHfiKCpaxim2NXPNOyH9h425YEjbiO.png', 'species': 'svsdzv'}, {'catId': 8, 'name': 'saffsafsa', 'gender': '1', 'age': '2', 'description': 'saffafsasasfsaffasafsafsfsa', 'price': 24112, 'images': 'cat/cat_8/jwqktY72RbfuLqZ8o3Ml5q6Ux9bYPc1p3PN3ThgXne2AGrgt1q.png//cat/cat_8/mfoTZXfKI5L2MkURsNnXDHb8V8MMXpDPE6lMhsqHipWyCLiOdh.png//cat/cat_8/gLoMCL6vuC8Frtl5foJ3dr6bDOFGaPFWVuov4uT5NjpWGokhM8.png//cat/cat_8/Nu3JzdcdEyBnobMhvDRY2cOzmtNSNWswdB0GdgAUSk2YmrI9nI.png//cat/cat_8/KKeOVPhvY7TxRPZxyfFblDxWkUoPWAQLr27SJgqalbzj5y48U5.png//cat/cat_8/jY4Y54dj0YPWHZ8OWXv8IeANooJQ1mrlkDnjGp5eLHopG1adl2.png', 'species': 'sfasafsasffsaasfafs'}]
+        cat["age"] = {"0": "Не указано", "1": "1 месяц", "2": "2 месяца", "3": "3 месяца", "4": "6 месяцев", "5": "1 год", "6": "2 года", "7": "3 года и более"}[cat["age"]]
+        for ct in dop_cats:
+            ct["age"] = {"0": "Не указано", "1": "1 месяц", "2": "2 месяца", "3": "3 месяца", "4": "6 месяцев", "5": "1 год", "6": "2 года", "7": "3 года и более"}[ct["age"]]
         # Из cat можешь извлекать всю необходимую информацию
         return get_render_template("cat-page.html", "Личная страница этого котика", cat=cat, dop_cats=dop_cats)
     return abort(404)

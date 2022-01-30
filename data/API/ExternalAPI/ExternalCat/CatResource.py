@@ -12,7 +12,7 @@ def to_dict(cat):
         cat_dict["catId"] = cat.catId
         cat_dict["name"] = cat.name
         cat_dict["gender"] = cat.gender
-        cat_dict["age"] = cat.age
+        cat_dict["age"] = {"0": "Не указано", "1": "1 месяц", "2": "2 месяца", "3": "3 месяца", "4": "6 месяцев", "5": "1 год", "6": "2 года", "7": "3 года и более"}[cat.age]
         cat_dict["description"] = cat.description
         cat_dict["price"] = cat.price
         cat_dict["images"] = cat.images
