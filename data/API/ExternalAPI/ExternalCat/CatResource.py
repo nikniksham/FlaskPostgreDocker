@@ -48,10 +48,8 @@ class CatListResource(Resource):
                     cats_list.append(to_dict(cat))
                 elif cat_id > need[1]:
                     break
-            session.close()
-            return jsonify(cats_list)
         session.close()
-        raise_error("Котики для этой страницы не найдены :(")
+        return jsonify(cats_list)
 
 
 class CatRelevantListRecourse(Resource):
@@ -63,6 +61,8 @@ class CatRelevantListRecourse(Resource):
         if cats:
             args = parser_cat.parse_args()
             for cat in cats:
+                if "catId" in args and args["catId"] == cat.catId:
+                    continue
                 mass = 0
                 if args['species'] and cat.species == args['species']:
                     mass += 2
@@ -83,6 +83,5 @@ class CatRelevantListRecourse(Resource):
             arr_with_mass.sort(key=lambda x: -x[1])
             for cat in arr_with_mass[:min(count, len(arr_with_mass))]:
                 cat_list.append(to_dict(cat[0]))
-            session.close()
-            return cat_list
-        raise_error("А всё, коты то кончились", session)
+        session.close()
+        return cat_list
