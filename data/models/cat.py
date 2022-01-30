@@ -8,8 +8,8 @@ class Cat(db.Model):
     name = sqlalchemy.Column(sqlalchemy.VARCHAR, nullable=False)
     images = sqlalchemy.Column(sqlalchemy.VARCHAR, nullable=False)
     species = sqlalchemy.Column(sqlalchemy.VARCHAR, nullable=False)
-    gender = sqlalchemy.Column(sqlalchemy.Integer, nullable=False)
-    age = sqlalchemy.Column(sqlalchemy.Integer, nullable=False)
+    gender = sqlalchemy.Column(sqlalchemy.VARCHAR, nullable=False)
+    age = sqlalchemy.Column(sqlalchemy.VARCHAR, nullable=False)
     description = sqlalchemy.Column(sqlalchemy.VARCHAR, nullable=False)
     price = sqlalchemy.Column(sqlalchemy.VARCHAR, nullable=False)
 
