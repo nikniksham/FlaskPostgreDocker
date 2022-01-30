@@ -1,30 +1,35 @@
 {% extends "base.html" %}
 
+{% block head %}
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+<link rel="stylesheet" type="text/css" href="slick/slick-theme.css"/>
+{% endblock %}
+
 {% block pageblock %}
 <div class="container">
     <a href="/" class="go-to-main">Вернуться в каталог</a>
     <div class="personal__block">
-        <p class="personal__name">{{name}}</p>
+        <p class="personal__name">{{cat.name}}</p>
         <div class="personal__wrapper">
-            <img src="/static/img/cats/cat1.jpeg" alt="" class="personal__img">
+            <img src="/static/img/{{cat.images}}" alt="" class="personal__img">
         </div>
         <div class="personal__info">
-            {% if gender == 0 %}
+            {% if cat.gender == '0' %}
             <p class="personal__gender"><span>Пол:</span><br>Не указан</p>
-            {% elif gender == 1 %}
+            {% elif cat.gender == '1' %}
             <p class="personal__gender"><span>Пол:</span><br>Мальчик</p>
-            {% elif gender == 2 %}
+            {% elif cat.gender == '2' %}
             <p class="personal__gender"><span>Пол:</span><br>Девочка</p>
             {% endif %}
-            {% if species != "" %}
-            <p class="personal__species"><span>Порода:</span><br>{{species}}</p>
+            {% if cat.species != "" %}
+            <p class="personal__species"><span>Порода:</span><br>{{cat.species}}</p>
             {% else %}
             <p class="personal__species"><span>Порода:</span><br>Не указана</p>
             {% endif %}
-            <p class="personal__age"><span>Возраст:</span><br>{{age}} мес.</p>
-            <p class="personal__price"><span>Цена:</span><br>{{price}} ₽</p>
+            <p class="personal__age"><span>Возраст:</span><br>{{cat.age}} мес.</p>
+            <p class="personal__price"><span>Цена:</span><br>{{cat.price}} ₽</p>
         </div>
-        <p class="personal__description"><span>Описание:</span><br>{{description}}</p>
+        <p class="personal__description"><span>Описание:</span><br>{{cat.description}}</p>
         <p class="personal__recommendation">Похожие:</p>
         <div class="cat__list line">
             {% for i in range(4) %}
@@ -46,4 +51,33 @@
         </div>
     </div>
 </div>
+<script src="/static/js/JQuery.min.js"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+<script>
+$(document).ready(function(){
+    $('.trainer-slider').slick({
+          dots: true,
+          infinite: true,
+          swipeToSlide: true,
+          slidesToShow: 3,
+          centerMode: true,
+          responsive: [
+            {
+              breakpoint: 1023,
+              settings: {
+                slidesToShow: 1,
+                centerMode: false
+              },
+            },
+            {
+              breakpoint: 1439,
+              settings: {
+                slidesToShow: 2,
+                centerMode: true
+              },
+            }
+          ]
+    });
+});
+</script>
 {% endblock %}

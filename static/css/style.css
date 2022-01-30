@@ -229,12 +229,12 @@ header {
 
 /* стиль элементов (опций), включая выбранный элемент: */
 .select-items div,.select-selected {
-    padding: 0 5px;
+    white-space: nowrap;
   color: #f0ede5;
-  padding: 8px 16px;
   border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
   cursor: pointer;
   user-select: none;
+  overflow: hidden;
 }
 
 /* стиль элементов (опции): */
@@ -296,7 +296,7 @@ header {
 }
 
 .personal__img {
-    max-width: 100%;
+    max-width: 350px;
     border-radius: 10px;
 }
 
@@ -375,7 +375,7 @@ header {
     top: 0;
     width: 48px;
     height: 90px;
-    background: white;
+    background: #fed7c8;
     border-top-left-radius: 18px;
     border-bottom-right-radius: 5px;
 }
