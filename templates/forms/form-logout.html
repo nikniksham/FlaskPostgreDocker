@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block pageblock %}
+<div class="container">
+    <div class="login_container">
+        <div class="login__block">
+            <p class="settings-title">{{title}}</p>
+            <form action="" method="post" enctype=multipart/form-data>
+                <div class="submit-block">
+                    <a class="link-exit btn btn-primary button-exit" href='/'>Отмена</a>
+                    {{ form.submit(type="submit", class="btn btn-success submit") }}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

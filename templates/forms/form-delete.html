@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block pageblock %}
+<div class="container">
+    <div class="login_container">
+        <div class="login__block">
+            <p class="settings-title">{{title}}</p>
+            <form action="" method="post" enctype=multipart/form-data>
+                <div class="submit-block">
+
+                    {% if message %}
+                    {% if result %}
+                    <p class="message-success">{{message}}</p>
+                    {% else %}
+                    <p class="message-error">{{message}}</p>
+                    {% endif %}
+                    {% endif %}
+
+                    <a class="link-exit btn btn-primary button-exit" href='/'>На главную</a>
+                    {{ form.submit(type="submit", class="btn btn-success submit") }}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
