@@ -2,24 +2,22 @@ import os
 import random
 import shutil
 import threading
-# import psycopg2
+import random
 from PIL import Image
 from flask_restful import Api, abort
 from flask import Flask, render_template, request
 from flask_login import LoginManager, login_required, logout_user, current_user, login_user
-from requests import post
 from werkzeug.utils import redirect, secure_filename
 from config import FlaskConfig
 from SessionManager import Session
 from data.forms import LoginForm, CatForm, DeleteForm, CatEditForm
-# from data.models.user import User
 from flask_sqlalchemy import SQLAlchemy
 from data.API.ExternalAPI.ExternalCat.CatResource import CatResourceUsual, CatListResource, CatRelevantListRecourse
 from data.API.InnerAPI.InnerCat import create_cat, get_cat, put_cat, delete_cat, get_all_species, get_list_cat, get_count_pages, get_cat_for_page, get_cat_reveal
-
 import sqlalchemy
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
+from data.API.InnerAPI.main_file import db_is_null
 
 # conn_string = "host='host.docker.internal' dbname='db_for_proj' user='postgres' password='password'"
 # conn = psycopg2.connect(conn_string)
@@ -85,7 +83,7 @@ class User(UserMixin, db.Model):
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, unique=True, autoincrement=True)
     fullname = sqlalchemy.Column(sqlalchemy.VARCHAR, nullable=False)
     username = sqlalchemy.Column(sqlalchemy.VARCHAR, nullable=False)
-    email = sqlalchemy.Column(sqlalchemy.VARCHAR, unique=True, nullable=False)
+    email = sqlalchemy.Column(sqlalchemy.VARCHAR, nullable=False)
     password = sqlalchemy.Column(sqlalchemy.VARCHAR, primary_key=False, nullable=False)
 
     def set_password(self, password):
@@ -133,13 +131,14 @@ def clear_old_files(key, path):
     delete_folder(path)
 
 
-def copy_image(path, old_name, new_name):
+def copy_image(old_name, new_name, path=application.config['UPLOAD_FOLDER']):
+    os.makedirs(path + "/".join(new_name.split("/")[:-1]))
     if os.path.exists(path+old_name):
         if os.path.exists(path+new_name):
             delete_img(path+new_name)
         shutil.copy(f"{path}{old_name}", f"{path}{new_name}")
-        return True
-    return False
+        return new_name
+    return ""
 
 
 def copy_files(old_folder, new_folder, filenames):
@@ -276,6 +275,9 @@ def load_user(user_id):
 
 
 def get_render_template(template_name, title, **kwargs):
+    if db_is_null():
+        create_admin()
+        return redirect("/")
     return render_template(template_name, title=title, is_admin=current_user.is_authenticated, species=get_all_species(),
                            **kwargs)
 
@@ -296,8 +298,7 @@ def main():
     #application.run(port=5000)  # @@@ FOR DEBUG IN PYCHARM
 
 
-@application.route("/admin/register", methods=['GET', 'POST'])
-def register():
+def create_admin():
     session = Session()
     user = User()
     user.username = "admin"
@@ -307,7 +308,68 @@ def register():
     session.add(user)
     session.commit()
     session.close()
-    return redirect("/admin/login")
+    create_data()
+
+
+def create_data():
+    imgs = ["cats/cat1.jpeg", "cats/cat2.jpeg", "cats/cat3.jpeg", "cats/cat4.jpg", "cats/cat5.jpg", "cats/cat6.jpg"]
+    gen = ["male", "female"]
+    nms = {"male": ["Мурзик", "Барсик", "Снежок", "Павлик", "Патрик"], "female": ["Дуся", "Маруся", "Муся", "Снежинка",
+                                                                                  "Ириська"]}
+    miss = {"male": "Пропал кот ", "female": "Пропала кошка "}
+    ags = ["1 месяц", "2 месяца", "3 месяца", "6 месяцев", "1 год", "2 года", "3 года и старше"]
+    specs = ["Рэгдоллом", "Рагамаффином", "Сибирская кошка", "Норвежская лесная кошка", "Американский керл",
+             "Турецкий ван", "Нибелунг", "Наполеон"]
+    descs = ["Продам кота в хорошие руки. Кот приучен к лотку, ласков и в котовскую меру нагл)",
+             "Кот/кошка на вязку, хорошие гены и порода, котик победитель многих выставок, почтный победитель конкурса"
+             "Мисс Котенция и член тайного мирового общества. Звоните!",
+             "Этот породистый котан оприходовал моего бедного домашнего котика!!! Продам за дёшего в ЛЮБЫЕ руки!!!!!",
+             "Породистые, красивые и ласковые коты враждуют в одной квартире!. Срочно продаю одного из них в добрые"
+             " руки", "Продам кота, звоните, привезу в любую точку вселенной",
+             "У нас родился сладкий котёнок с норковой шубкой.Необычного шоколадного окраса.Родители проверены по "
+             "потомству и здоровью генетически.Призер и участник выставок, многократный чемпион.Уже полностью готов к "
+             "переезду в новый дом, приучен ко всему, социализирован.Малыш растёт в ласке с детьми и ждёт любящие ручки"
+             " мамапап. Милый, забавный, игривый и активный.Привит, документы оформлены."]
+    descs_fr = ["Питомник предлагает молодого котика, выведенного из разведения, по цене кастрации и стерелизации.",
+                "Отдам лаского, доброго котика в такие же ласковые и добрые руки",
+                "Коту всего полтора года, Шустрый активный, очень умный мальчик. Слегка трусишка, но привыкая к "
+                "человеку становиться ласковым. Отлично знает лоточек, обработан от всех паразитов. Кушает сухой и "
+                "влажный корм. Отлично уживается с другими хвостами. Вакцинирован, кастрирован. Приезжайте знакомиться,"
+                " привезу в любой район Москвы и области!",
+                "Котёнок мальчик. Ласковый и приучен к лотку. Родился с дефектом, не сгибаются задние лапки. Но на "
+                "активность и передвижение не сказывается. Не поднялась рука усыпить. Хотим найти детке новый дом и "
+                "любящих хозяев. Договоримся, можем приехать в любое место Москвы."]
+    descs_mis = ["ПРОПАЛ КОТ 28.01.2022, СРОЧНО, ПОМОГИТЕ НАЙТИ! Ласковый, с ошейником, отзывается на кис-кис или своё"
+                 " имя, при наличии информации прошу звонить!",
+                 "Кот. Особые приметы: белые носочки, белые трусики и лифчик. Район пропажи: г. Королёв, пос. "
+                 "Валентиновка, ул. П", "Очень щедро вознагражу на нахождение моего бедного кота. Вышел утром погулять "
+                 "и пропал", "Найден кот в деревне Поливаново, Домодедовский район. Кастрирован. Ищем хозяев!"]
+
+    for i in range(24):
+        session = Session()
+        new_cat = Cat()
+        new_cat.images = copy_image(imgs[random.randrange(6)], f"cat/cat_{i + 1}/{create_random_name(50)}.png")
+        new_cat.age = ags[random.randrange(7)]
+        new_cat.species = specs[random.randrange(8)]
+        ge = random.randrange(2)
+        gend = gen[ge]
+        new_cat.gender = str(ge + 1)
+        is_miss = random.randrange(11) < 1
+        new_cat.name = (miss[gend] if is_miss else "") + nms[gend][random.randrange(5)]
+        if is_miss:
+            new_cat.description = descs_mis[random.randrange(len(descs_mis))]
+            new_cat.price = "0"
+        elif random.randrange(11) < 2:
+            new_cat.description = descs_fr[random.randrange(len(descs_fr))]
+            new_cat.price = "0"
+        else:
+            new_cat.description = descs[random.randrange(len(descs))]
+            new_cat.price = str(random.randrange(151) * 100)
+        new_cat.catId = (i + 1)
+        session.add(new_cat)
+        session.commit()
+        session.close()
+    # copy_image
 
 
 @application.route("/admin/login", methods=['GET', 'POST'])

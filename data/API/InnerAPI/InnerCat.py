@@ -123,6 +123,8 @@ def put_cat(cat_id, args):
             cat.description = args["description"]
         if key == 'age':
             cat.age = args['age']
+        if key == 'price':
+            cat.price = args['price']
         if key == 'images':
             cat.images = args['images']
     if count == 0:

@@ -1,7 +1,9 @@
 import os
-print((os.path.abspath("db")))  # !!! FOR SETTING START WITH docker-compose up
+import shutil
 
-#                       !!!   LAUNCH ME   !!!   DON'T COMMENT   !!!
-a = [1052, 1086, 1081, 32, 1076, 1080, 1089, 1082, 1086, 1088, 1076, 32, 32, 78, 105, 107, 111, 108, 97, 117, 115, 117, 115, 35, 52, 54, 54, 52]
-for l in a:
-    print(chr(l), end="")
+from run import delete_img, create_random_name, copy_image
+
+
+imgs = ["cats/cat1.jpeg", "cats/cat2.jpeg", "cats/cat3.jpeg", "cats/cat4.jpg", "cats/cat5.jpg", "cats/cat6.jpg"]
+for i in range(len(imgs)):
+    print(copy_image(imgs[i], f"cat/cat_{i + 1}/{create_random_name(50)}.png"))

@@ -54,11 +54,11 @@
                     <div>
                         <p class="cat__name">{{cat.name}}</p>
                         <p class="cat__age"><span>Возраст: </span> {{cat.age}}</p>
-                        {% if cat.gender == '0' %}
+                        {% if cat.gender == "0" %}
                         <p class="cat__gender"><span>Пол:</span> Не указан</p>
-                        {% elif cat.gender == '1' %}
+                        {% elif cat.gender == "1" %}
                         <p class="cat__gender"><span>Пол:</span> Мальчик</p>
-                        {% elif cat.gender == '2' %}
+                        {% elif cat.gender == "2" %}
                         <p class="cat__gender"><span>Пол:</span> Девочка</p>
                         {% endif %}
                         <p class="cat__cost"><span>Цена: </span> {{cat.price}} ₽</p>

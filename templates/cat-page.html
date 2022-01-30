@@ -14,11 +14,11 @@
             <img src="/static/img/{{cat.images.split('//')[0]}}" alt="" class="personal__img">
         </div>
         <div class="personal__info">
-            {% if cat.gender == '0' %}
+            {% if cat.gender == "0" %}
             <p class="personal__gender"><span>Пол:</span><br>Не указан</p>
-            {% elif cat.gender == '1' %}
+            {% elif cat.gender == "1" %}
             <p class="personal__gender"><span>Пол:</span><br>Мальчик</p>
-            {% elif cat.gender == '2' %}
+            {% elif cat.gender == "2" %}
             <p class="personal__gender"><span>Пол:</span><br>Девочка</p>
             {% endif %}
             {% if cat.species != "" %}
