@@ -7,10 +7,10 @@ from data.models.base import db
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, unique=True, autoincrement=True)
-    fullname = sqlalchemy.Column(sqlalchemy.VARCHAR(100), nullable=False)
-    username = sqlalchemy.Column(sqlalchemy.VARCHAR(100), nullable=False)
-    email = sqlalchemy.Column(sqlalchemy.VARCHAR(50), unique=True, nullable=False)
-    password = sqlalchemy.Column(sqlalchemy.VARCHAR(255), primary_key=False, nullable=False)
+    fullname = sqlalchemy.Column(sqlalchemy.VARCHAR, nullable=False)
+    username = sqlalchemy.Column(sqlalchemy.VARCHAR, nullable=False)
+    email = sqlalchemy.Column(sqlalchemy.VARCHAR, unique=True, nullable=False)
+    password = sqlalchemy.Column(sqlalchemy.VARCHAR, primary_key=False, nullable=False)
 
     def set_password(self, password):
         self.password = generate_password_hash(password, method='sha256')

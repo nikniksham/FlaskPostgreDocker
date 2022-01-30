@@ -2,6 +2,9 @@ import os
 import random
 import shutil
 import threading
+
+# import psycopg2
+
 from PIL import Image
 from flask_restful import Api, abort
 from flask import Flask, render_template, request
@@ -17,6 +20,34 @@ from data.API.ExternalAPI.ExternalCat.CatResource import CatResourceUsual, CatLi
 from data.API.InnerAPI.InnerCat import create_cat, get_cat, put_cat, delete_cat, get_all_species, get_list_cat, get_count_pages, get_cat_for_page, get_cat_reveal
 
 db = SQLAlchemy()
+
+# conn_string = "host='host.docker.internal' dbname='db_for_proj' user='postgres' password='password'"
+# conn = psycopg2.connect(conn_string)
+# with conn.cursor() as cursor:
+#     # cursor.execute("""
+#     #     CREATE TABLE users(
+#     #         id serial PRIMARY KEY,
+#     #         fullname varchar NOT NULL,
+#     #         username varchar NOT NULL,
+#     #         email varchar NOT NULL,
+#     #         password varchar NOT NULL
+#     #     );
+#     # """)
+#
+#     cursor.execute("""
+#             CREATE TABLE cats(
+#                 catId serial PRIMARY KEY,
+#                 name varchar NOT NULL,
+#                 images varchar NOT NULL,
+#                 species varchar NOT NULL,
+#                 gender varchar NOT NULL,
+#                 age varchar NOT NULL,
+#                 description varchar NOT NULL,
+#                 price varchar NOT NULL,
+#             );
+#         """)
+#     conn.commit()
+#     print(cursor.fetchone())
 
 admin_images = {}
 let = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890"

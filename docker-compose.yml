@@ -9,7 +9,7 @@ services:
       - DATABASE_URL=postgresql://postgre:password@host.docker.internal/db_for_proj  # !!! FOR START WITH docker-compose up
       #- DATABASE_URL=postgresql://postgre:password@localhost/db_for_proj  # @@@ FOR DEBUG IN PYCHARM
     volumes:
-      - ./:/app
+      - .F:\PyCharmCommunityEdition2020.2.2\FlaskPostgreDocker
     ports:
       - "5000:5000"
     expose:
@@ -17,16 +17,19 @@ services:
     depends_on:
       - db
     restart: on-failure
-    command: run.py
+    command: python run.py
 
   db:
-    image: postgres:14
-    command: postgres -p 5432
+    image: postgres
+    restart: always
+    # command: postgres -p 5432 # POSTGRES_USER=postgres -e POSTGRES_PASSWORD=password -e POSTGRES_DB=db_for_proj
     environment:
       POSTGRES_DB: "db_for_proj"
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "password"
     volumes:
-      - .C:\Users\Niki\PycharmProjects\FlaskPostgreDocker\db
+      - pgdata:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+volumes:
+  pgdata:
