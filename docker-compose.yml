@@ -6,8 +6,8 @@ services:
     environment:
       - FLASK_ENV=development
       - PYTHONUNBUFFERED=True
-      #- DATABASE_URL=postgresql://postgre:password@host.docker.internal/db_for_proj  # !!! FOR START WITH docker-compose up
-      - DATABASE_URL=postgresql://postgre:password@localhost/db_for_proj  # @@@ FOR DEBUG IN PYCHARM
+      - DATABASE_URL=postgresql://postgre:password@host.docker.internal/db_for_proj  # !!! FOR START WITH docker-compose up
+      #- DATABASE_URL=postgresql://postgre:password@localhost/db_for_proj  # @@@ FOR DEBUG IN PYCHARM
     volumes:
       - ./:/app
     ports:

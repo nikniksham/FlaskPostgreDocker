@@ -217,8 +217,8 @@ def get_render_template(template_name, title, **kwargs):
 
 def main():
     db.init_app(application)
-    #application.run(host='0.0.0.0')  # !!! FOR START WITH docker-compose up
-    application.run(port=5000)  # @@@ FOR DEBUG IN PYCHARM
+    application.run(host='0.0.0.0')  # !!! FOR START WITH docker-compose up
+    #application.run(port=5000)  # @@@ FOR DEBUG IN PYCHARM
 
 
 @application.route("/admin/login", methods=['GET', 'POST'])
