@@ -6,6 +6,7 @@ from PIL import Image
 from flask_restful import Api, abort
 from flask import Flask, render_template, request
 from flask_login import LoginManager, login_required, logout_user, current_user, login_user
+from requests import post
 from werkzeug.utils import redirect, secure_filename
 from config import FlaskConfig
 from SessionManager import Session
@@ -216,8 +217,8 @@ def get_render_template(template_name, title, **kwargs):
 
 def main():
     db.init_app(application)
-    # application.run(host='0.0.0.0')  # !!! FOR START WITH docker-compose up
-    application.run(port='5000')  # @@@ FOR DEBUG IN PYCHARM
+    #application.run(host='0.0.0.0')  # !!! FOR START WITH docker-compose up
+    application.run(port=5000)  # @@@ FOR DEBUG IN PYCHARM
 
 
 @application.route("/admin/login", methods=['GET', 'POST'])
@@ -262,6 +263,7 @@ def admin_create_cat():
             m = put_cat(message['id'], {"images": "//".join(filenames)})
             result = True
             clear_old_files(current_user.email, path)
+        filenames = []
         message = list(message.values())[-1]
     return get_render_template('forms/form-cat.html', title='Создание кота', message=message, form=form, result=result,
                                filenames=filenames, image_len=len(filenames) + 1)
@@ -275,6 +277,7 @@ def admin_edit_cat(cat_id):
     message, result, filenames = None, False, []
     if "message" not in cat:
         if request.method == 'POST':
+            r = request.files
             filenames = save_images(request.files, path, current_user.email, max_image=15)
             chimg = list(map(lambda x: x.split("/")[-1], filenames)) != list(map(lambda x: x.split("/")[-1], cat["images"].split("//")))
             message = put_cat(cat_id, {"name": form.name.data, "gender": form.gender.data, "chimg": chimg, "age": form.age.data,
@@ -328,9 +331,12 @@ def website_main_page():
 def cat_page_by_id(cat_id):
     cat = get_cat(cat_id)
     if cat:
+        # dop_cats = post("http://localhost:5000/api/cat_relevant/4", json={"catId": cat["id"], "species": cat["species"], "gender": cat["gender"], "age": cat["age"], "text": cat["description"]}).json()
+        dop_cats = [{'catId': 7, 'name': 'Какой-то кот', 'gender': '1', 'age': '7', 'description': 'Какой-то кот. Потерян, ищет новый дом. Что-то там ещё и про что-то ещё', 'price': 5000, 'images': 'cat/cat_7/tNwLvI7cvDsWU43uyfwVi6TzcLFAqhU8RktTqJVgmAoNFBJLwa.png//cat/cat_7/LHyp0mBueb8oAKBvpwsUsMdiShhlRAn0MgRiGUdS9MRRtSheiN.png//cat/cat_7/THqWs3Xu7DYu1nsMBqpXMhBT21jwfRaAa9Zn6uNKbsb3bfcJDk.png//cat/cat_7/kDg6oh7Rzqy50hGRnX5vQp7uc48Ctt9xPXcgumVqep00RlWIG4.png//cat/cat_7/zWI6X8SeSnilt28kKhWqjbnzQuz0ZRJZqqNZsBcXTnkCSxDebQ.png//cat/cat_7/wZrAuSPwadwG1ydXjywIMRN3iRR5TAbcvivhSRBvn2rjnNNvSB.png//cat/cat_7/TKg9mL3340DNZCfaAgJnXEsP5DCSvFfZkxGfJwtY9z3GLaCVaf.png', 'species': 'Программист'}, {'catId': 9, 'name': 'aesrdtfygu', 'gender': '1', 'age': '7', 'description': 'zxvvzxvxzvxv', 'price': 241142412, 'images': 'cat/cat_9/bucV0yUGwprAxfmq8913MHfiKCpaxim2NXPNOyH9h425YEjbiO.png', 'species': 'svsdzv'}, {'catId': 8, 'name': 'saffsafsa', 'gender': '1', 'age': '2', 'description': 'saffafsasasfsaffasafsafsfsa', 'price': 24112, 'images': 'cat/cat_8/jwqktY72RbfuLqZ8o3Ml5q6Ux9bYPc1p3PN3ThgXne2AGrgt1q.png//cat/cat_8/mfoTZXfKI5L2MkURsNnXDHb8V8MMXpDPE6lMhsqHipWyCLiOdh.png//cat/cat_8/gLoMCL6vuC8Frtl5foJ3dr6bDOFGaPFWVuov4uT5NjpWGokhM8.png//cat/cat_8/Nu3JzdcdEyBnobMhvDRY2cOzmtNSNWswdB0GdgAUSk2YmrI9nI.png//cat/cat_8/KKeOVPhvY7TxRPZxyfFblDxWkUoPWAQLr27SJgqalbzj5y48U5.png//cat/cat_8/jY4Y54dj0YPWHZ8OWXv8IeANooJQ1mrlkDnjGp5eLHopG1adl2.png', 'species': 'sfasafsasffsaasfafs'}]
         # Из cat можешь извлекать всю необходимую информацию
-        return get_render_template("cat-page.html", "Личная страница этого котика")
+        return get_render_template("cat-page.html", "Личная страница этого котика", cat=cat, dop_cats=dop_cats)
     return abort(404)
+
 
 if __name__ == '__main__':
     main()
