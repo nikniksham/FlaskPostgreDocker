@@ -4,10 +4,10 @@
 <img src="/static/img/cat_main.jpg" alt="Кот лежит" class="main-page__image">
 <div class="container">
     <div class="settings__wrapper">
-        <form action="GET">
+        <form id="form" action="POST">
             <div class="settings__container">
                 <div class="custom-select" style="width:200px;">
-                    <select>
+                    <select name="species">
                         <option value="Type 0">Порода</option>
                         {% for spec in species %}
                         <option value="{{spec}}">{{spec}}</option>
@@ -15,7 +15,7 @@
                     </select>
                 </div>
                 <div class="custom-select" style="width:175px;">
-                    <select>
+                    <select name="age">
                         <option value="0">Возраст</option>
                         <option value="1">1 месяц</option>
                         <option value="2">2 месяца</option>
@@ -27,7 +27,7 @@
                     </select>
                 </div>
                 <div class="custom-select" style="width:150px;">
-                    <select>
+                    <select name="gender">
                         <option value="0">Пол</option>
                         <option value="1">Мужской</option>
                         <option value="2">Женский</option>
@@ -42,7 +42,9 @@
         {% for cat in cats %}
         <div class="cat__container">
             <div class="cat__wrapper">
-                <img src="/static/img/{{cat.images.split('//')[0]}}" alt="Самый классный кот" class="cat__img">
+                <div class="cat__img-wrapper">
+                    <img src="/static/img/{{cat.images.split('//')[0]}}" alt="Самый классный кот" class="cat__img">
+                </div>
                 {% if is_admin %}
                 <div class="admin__back"></div>
                 <a href="/admin/admin-edit-cat/CATID" class="admin__edit"></a>
@@ -86,4 +88,12 @@
     </div>
 </div>
 <script src="/static/js/select.js"></script>
+<script>
+    document.getElementById("submit").addEventListener("keyup", function(event) {
+        if (event.keyCode === 13) {
+            document.getElementById("form").submit();
+            return false;
+        }
+    });
+</script>
 {% endblock %}
