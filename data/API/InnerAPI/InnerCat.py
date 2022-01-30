@@ -39,6 +39,21 @@ def get_count_pages():
     return count
 
 
+def get_cat_for_page(page):
+    page = max(0, page - 1)
+    session = Session()
+    cats = session.query(Cat).all()
+    cats_list, need = [], [6 * page, 6 * (page + 1) - 1]
+    if cats:
+        for cat_id, cat in enumerate(cats):
+            if need[0] <= cat_id <= need[1]:
+                cats_list.append(to_dict(cat))
+            elif cat_id > need[1]:
+                break
+    session.close()
+    return cats_list
+
+
 def get_cat(cat_id):
     cat, session = find_by_id(cat_id, Session())
     if type(cat) is dict:

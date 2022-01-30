@@ -14,7 +14,7 @@ from data.forms import LoginForm, CatForm, DeleteForm, CatEditForm
 from data.models.user import User
 from flask_sqlalchemy import SQLAlchemy
 from data.API.ExternalAPI.ExternalCat.CatResource import CatResourceUsual, CatListResource, CatRelevantListRecourse
-from data.API.InnerAPI.InnerCat import create_cat, get_cat, put_cat, delete_cat, get_all_species, get_list_cat, get_count_pages
+from data.API.InnerAPI.InnerCat import create_cat, get_cat, put_cat, delete_cat, get_all_species, get_list_cat, get_count_pages, get_cat_for_page
 
 db = SQLAlchemy()
 
@@ -212,7 +212,7 @@ def load_user(user_id):
 
 def get_render_template(template_name, title, **kwargs):
     return render_template(template_name, title=title, is_admin=current_user.is_authenticated, species=get_all_species(),
-                           pages_count=get_count_pages(), **kwargs)
+                           pages_count=10, **kwargs)
 
 
 def main():
@@ -323,7 +323,15 @@ def admin_delete_cat(cat_id):
 # Стартовая страница
 @application.route("/")
 def website_main_page():
-    return get_render_template("main-page.html", title="главная страница")
+    return get_render_template("main-page.html", title="главная страница", current_page=1)
+    # return "Some data"
+
+
+# Стартовая страница
+@application.route("/page/<int:page>")
+def website_main_page_by_page(page):
+    cats = get_cat_for_page(page)
+    return get_render_template("main-page.html", title="главная страница", current_page=page)
     # return "Some data"
 
 
