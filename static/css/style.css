@@ -424,6 +424,19 @@ header {
     background-size: contain;
 }
 
+footer {
+    width: 100%;
+    background: #030303;
+    color: white !important;
+    padding: 20px 0;
+}
+
+.footer__container {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+}
+
 @media (max-width: 991.99px) {
     .cat__container {
         width: calc(50% - 15px);
