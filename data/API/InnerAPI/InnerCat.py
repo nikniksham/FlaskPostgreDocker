@@ -39,6 +39,39 @@ def get_count_pages():
     return count
 
 
+def get_cat_reveal(args):
+    session = Session()
+    cats = session.query(Cat).all()
+    cat_list = []
+    arr_with_mass = []
+    if cats:
+        for cat in cats:
+            if "catId" in args and args["catId"] == cat.catId:
+                continue
+            mass = 0
+            if args['species'] and cat.species == args['species'] != "":
+                mass += 2
+            if args['gender'] and cat.gender == args['gender'] != "0":
+                mass += 2
+            if args['age'] and cat.age == args['age'] != "0":
+                mass += 2
+            if args['text']:
+                for w in args['text']:
+                    if w in cat.name:
+                        mass += 1
+                        break
+                for w in args['text']:
+                    if w in cat.description:
+                        mass += 1
+                        break
+            arr_with_mass.append([cat, mass])
+        arr_with_mass.sort(key=lambda x: -x[1])
+        for cat in arr_with_mass[:min(args["count"], len(arr_with_mass))]:
+            cat_list.append(to_dict(cat[0]))
+    session.close()
+    return cat_list
+
+
 def get_cat_for_page(page):
     page = max(0, page - 1)
     session = Session()
@@ -90,6 +123,8 @@ def put_cat(cat_id, args):
             cat.description = args["description"]
         if key == 'age':
             cat.age = args['age']
+        if key == 'price':
+            cat.price = args['price']
         if key == 'images':
             cat.images = args['images']
     if count == 0:

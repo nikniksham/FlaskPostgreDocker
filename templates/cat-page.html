@@ -11,14 +11,14 @@
     <div class="personal__block">
         <p class="personal__name">{{cat.name}}</p>
         <div class="personal__wrapper">
-            <img src="/static/img/{{cat.images}}" alt="" class="personal__img">
+            <img src="/static/img/{{cat.images.split('//')[0]}}" alt="" class="personal__img">
         </div>
         <div class="personal__info">
-            {% if cat.gender == '0' %}
+            {% if cat.gender == "0" %}
             <p class="personal__gender"><span>Пол:</span><br>Не указан</p>
-            {% elif cat.gender == '1' %}
+            {% elif cat.gender == "1" %}
             <p class="personal__gender"><span>Пол:</span><br>Мальчик</p>
-            {% elif cat.gender == '2' %}
+            {% elif cat.gender == "2" %}
             <p class="personal__gender"><span>Пол:</span><br>Девочка</p>
             {% endif %}
             {% if cat.species != "" %}
@@ -26,26 +26,32 @@
             {% else %}
             <p class="personal__species"><span>Порода:</span><br>Не указана</p>
             {% endif %}
-            <p class="personal__age"><span>Возраст:</span><br>{{cat.age}} мес.</p>
+            <p class="personal__age"><span>Возраст:</span><br>{{cat.age}}</p>
             <p class="personal__price"><span>Цена:</span><br>{{cat.price}} ₽</p>
         </div>
         <p class="personal__description"><span>Описание:</span><br>{{cat.description}}</p>
         <p class="personal__recommendation">Похожие:</p>
         <div class="cat__list line">
-            {% for i in range(4) %}
+            {% for cat in dop_cats %}
             <div class="cat__container-small">
                 <div class="cat__wrapper">
                     <div class="cat__img-wrapper">
-                        <img src="/static/img/cats/cat1.jpeg" alt="Самый классный кот" class="cat__img">
+                        <img src="/static/img/{{cat.images.split('//')[0]}}" alt="Самый классный кот" class="cat__img">
                     </div>
                     <div class="cat__info">
                         <div>
-                            <p class="cat__name">Маруся</p>
-                            <p class="cat__age"><span>Возраст: </span> 64 месяца</p>
-                            <p class="cat__gender"><span>Пол: </span> Женский</p>
-                            <p class="cat__cost"><span>Цена: </span> 100 ₽</p>
+                            <p class="cat__name">{{cat.name}}</p>
+                            <p class="cat__age"><span>Возраст: </span> {{cat.age}}</p>
+                            {% if cat.gender == '0' %}
+                            <p class="cat__gender"><span>Пол:</span> Не указан</p>
+                            {% elif cat.gender == '1' %}
+                            <p class="cat__gender"><span>Пол:</span> Мальчик</p>
+                            {% elif cat.gender == '2' %}
+                            <p class="cat__gender"><span>Пол:</span> Девочка</p>
+                            {% endif %}
+                            <p class="cat__cost"><span>Цена: </span> {{cat.price}} ₽</p>
                         </div>
-                        <a href="#" class="cat__link">Больше</a>
+                        <a href="/cat-page/{{cat.catId}}" class="cat__link">Больше</a>
                     </div>
                 </div>
             </div>
@@ -53,33 +59,4 @@
         </div>
     </div>
 </div>
-<script src="/static/js/JQuery.min.js"></script>
-<script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
-<script>
-$(document).ready(function(){
-    $('.trainer-slider').slick({
-          dots: true,
-          infinite: true,
-          swipeToSlide: true,
-          slidesToShow: 3,
-          centerMode: true,
-          responsive: [
-            {
-              breakpoint: 1023,
-              settings: {
-                slidesToShow: 1,
-                centerMode: false
-              },
-            },
-            {
-              breakpoint: 1439,
-              settings: {
-                slidesToShow: 2,
-                centerMode: true
-              },
-            }
-          ]
-    });
-});
-</script>
 {% endblock %}

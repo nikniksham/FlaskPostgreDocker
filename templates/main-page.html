@@ -4,7 +4,7 @@
 <img src="/static/img/cat_main.jpg" alt="Кот лежит" class="main-page__image">
 <div class="container">
     <div class="settings__wrapper">
-        <form id="form" action="POST">
+        <form id="form" method="POST" action="/cat_relevant">
             <div class="settings__container">
                 <div class="custom-select" style="width:200px;">
                     <select name="species">
@@ -38,25 +38,31 @@
         </form>
     </div>
     <div class="cat__list">
-        {% for i in range(6) %}
+        {% for cat in cats %}
         <div class="cat__container">
             <div class="cat__wrapper">
                 <div class="cat__img-wrapper">
-                    <img src="/static/img/cats/cat1.jpeg" alt="Самый классный кот" class="cat__img">
+                    <img src="/static/img/{{cat.images.split('//')[0]}}" alt="Самый классный кот" class="cat__img">
                 </div>
                 {% if is_admin %}
-                    <div class="admin__back"></div>
-                    <a href="/admin/admin-edit-cat/CATID" class="admin__edit"></a>
-                    <a href="/admin/admin-delete-cat/CATID" class="admin__delete"></a>
+                <div class="admin__back"></div>
+                <a href="/admin/admin-edit-cat/{{cat.catId}}" class="admin__edit"></a>
+                <a href="/admin/admin-delete-cat/{{cat.catId}}" class="admin__delete"></a>
                 {% endif %}
                 <div class="cat__info">
                     <div>
-                        <p class="cat__name">Маруся</p>
-                        <p class="cat__age"><span>Возраст: </span> 64 месяца</p>
-                        <p class="cat__gender"><span>Пол: </span> Женский</p>
-                        <p class="cat__cost"><span>Цена: </span> 100 ₽</p>
+                        <p class="cat__name">{{cat.name}}</p>
+                        <p class="cat__age"><span>Возраст: </span> {{cat.age}}</p>
+                        {% if cat.gender == "0" %}
+                        <p class="cat__gender"><span>Пол:</span> Не указан</p>
+                        {% elif cat.gender == "1" %}
+                        <p class="cat__gender"><span>Пол:</span> Мальчик</p>
+                        {% elif cat.gender == "2" %}
+                        <p class="cat__gender"><span>Пол:</span> Девочка</p>
+                        {% endif %}
+                        <p class="cat__cost"><span>Цена: </span> {{cat.price}} ₽</p>
                     </div>
-                    <a href="#" class="cat__link">Больше</a>
+                    <a href="/cat-page/{{cat.catId}}" class="cat__link">Больше</a>
                 </div>
             </div>
         </div>
@@ -65,17 +71,17 @@
     <div class="pagination__aligner">
         <div class="pagination">
             {% if current_page != 1 %}
-                <a href="/page/{{current_page-1}}">&laquo;</a>
+            <a href="/page/{{current_page-1}}">&laquo;</a>
             {% endif %}
             {% for i in range(pages_count) %}
-                {% if i == current_page - 1 %}
-                    <a class="active" href="#">{{i+1}}</a>
-                {% else %}
-                    <a href="/page/{{i+1}}">{{i + 1}}</a>
-                {% endif %}
+            {% if i == current_page - 1 %}
+            <a class="active" href="#">{{i+1}}</a>
+            {% else %}
+            <a href="/page/{{i+1}}">{{i + 1}}</a>
+            {% endif %}
             {% endfor %}
             {% if current_page != pages_count %}
-                <a href="/page/{{current_page+1}}">&raquo;</a>
+            <a href="/page/{{current_page+1}}">&raquo;</a>
             {% endif %}
         </div>
     </div>
